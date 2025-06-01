@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000", // Cho dev local
-      "https://cipher-check-mu.vercel.app", // Cho frontend Vercel
+      "https://cipher-check-fontend.vercel.app",
     ],
     credentials: true,
   })
