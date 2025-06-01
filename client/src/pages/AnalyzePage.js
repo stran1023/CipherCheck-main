@@ -13,6 +13,9 @@ const AnalyzePage = () => {
     <div
       style={{
         minHeight: "100vh",
+    <div
+      style={{
+        minHeight: "100vh",
         backgroundImage: `url(${backgroundImg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
