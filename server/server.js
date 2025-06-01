@@ -2,37 +2,42 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const path = require("path");
 require("dotenv").config();
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // Dùng biến PORT nếu được Render cấp
 
-// ✅ Cấu hình middleware chung trước khi dùng routes
+// ✅ CORS: Cho phép frontend từ Vercel truy cập backend này
 app.use(
   cors({
-    origin: "http://localhost:3000", // Cho phép frontend React truy cập
+    origin: [
+      "http://localhost:3000", // Cho dev local
+      "https://cipher-check-mu.vercel.app", // Cho frontend Vercel
+    ],
     credentials: true,
   })
 );
+
+// ✅ Middleware xử lý JSON và file upload
 app.use(express.json());
+const upload = multer({ dest: "uploads/" }); // lưu file tạm vào thư mục uploads/
 
-// Cấu hình multer để lưu file tạm vào thư mục uploads/
-const upload = multer({ dest: "uploads/" });
-
-// ✅ Import routes sau khi middleware đã được cấu hình
+// ✅ Import routes
 const userRoute = require("./routes/usersRoute");
 const fileRoute = require("./routes/filesRoute");
 const scanRoute = require("./routes/scanRoute");
 
-// Định nghĩa các route
+// ✅ Gán route
 app.use("/api/users", userRoute);
 app.use("/api/files", fileRoute);
+app.use("/api/scan", upload.single("file"), scanRoute); // xử lý upload + scan
 
-// Route đặc biệt: upload + scan file dùng multer middleware
-app.use("/api/scan", upload.single("file"), scanRoute);
-
-// Khởi động server
+// ✅ Khởi động server
 app.listen(port, () => {
-  console.log(`🚀 Backend running tại http://localhost:${port}`);
+  const env = process.env.NODE_ENV || "development";
+  const baseUrl =
+    env === "production"
+      ? "https://ciphercheck-main.onrender.com"
+      : `http://localhost:${port}`;
+  console.log(`🚀 Backend running tại ${baseUrl}`);
 });
