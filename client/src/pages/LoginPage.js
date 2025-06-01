@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -8,15 +9,23 @@ const LoginPage = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    try {
+      const res = await axios.post("http://localhost:3001/api/users/login", {
+        username,
+        password,
+      });
 
-    if (users[username] && users[username] === password) {
-      login(username);
+      console.log("✅ Đăng nhập thành công:", res.data);
+      login(res.data.username);
       navigate("/analyze");
-    } else {
+    } catch (err) {
+      console.error(
+        "❌ Đăng nhập thất bại:",
+        err.response?.data || err.message
+      );
       alert("Sai tài khoản hoặc mật khẩu");
     }
   };
@@ -39,6 +48,7 @@ const LoginPage = () => {
           placeholder="Tên đăng nhập"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
           style={{ width: "100%", marginBottom: 15, padding: 10 }}
         />
         <input
@@ -46,6 +56,7 @@ const LoginPage = () => {
           placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
           style={{ width: "100%", marginBottom: 15, padding: 10 }}
         />
         <button
