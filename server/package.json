@@ -11,18 +11,12 @@
   "description": "",
   "dependencies": {
     "axios": "^1.9.0",
-<<<<<<< HEAD
-=======
     "bcryptjs": "^3.0.2",
->>>>>>> ec52b92a43e2401691ce1765d83b68d7054d4330
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "form-data": "^4.0.2",
-<<<<<<< HEAD
-=======
     "mssql": "^11.0.1",
->>>>>>> ec52b92a43e2401691ce1765d83b68d7054d4330
     "multer": "^2.0.0"
   }
 }

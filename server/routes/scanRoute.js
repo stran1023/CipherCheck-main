@@ -2,18 +2,27 @@ const express = require("express");
 const fs = require("fs");
 const axios = require("axios");
 const FormData = require("form-data");
+const multer = require("multer");
 const { poolPromise } = require("../db/sqlClient");
 require("dotenv").config();
 
 const router = express.Router();
 const VT_API_KEY = process.env.VT_API_KEY;
 
-router.post("/", async (req, res) => {
-  const filePath = req.file.path;
-  const originalFileName = req.file.originalname;
-  const mimeType = req.file.mimetype;
-  const size = req.file.size;
-  const userId = req.body.userId; // 👈 cần truyền userId từ frontend
+// ✅ Khởi tạo multer để lưu file tạm thời vào thư mục uploads/
+const upload = multer({ dest: "uploads/" });
+
+// ✅ Sử dụng middleware upload.single để xử lý file upload
+router.post("/", upload.single("file"), async (req, res) => {
+  const filePath = req.file?.path;
+  const originalFileName = req.file?.originalname;
+  const mimeType = req.file?.mimetype;
+  const size = req.file?.size;
+  const userId = req.body.userId;
+
+  if (!req.file) {
+    return res.status(400).json({ error: "Không nhận được file upload" });
+  }
 
   if (!userId) {
     fs.unlink(filePath, () => {});
@@ -86,7 +95,7 @@ router.post("/", async (req, res) => {
     const totalEngines =
       stats.harmless + stats.malicious + stats.undetected + stats.suspicious;
 
-    // ✅ Step 2: Lưu vào bảng Files và FileChecks
+    // Step 2: Lưu vào bảng Files và FileChecks
     const pool = await poolPromise;
 
     // Lưu file vào bảng Files
@@ -127,7 +136,11 @@ router.post("/", async (req, res) => {
       fileId,
     });
   } catch (err) {
-    console.error("❌ Lỗi scanRoute:", err.message);
+    console.error("❌ Lỗi scanRoute:", {
+      message: err.message,
+      stack: err.stack,
+      response: err.response?.data || null,
+    });
     fs.unlink(filePath, () => {});
     res.status(500).json({ error: "Lỗi khi xử lý file." });
   }

@@ -42,7 +42,6 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Lỗi server khi đăng ký" });
   }
 });
-
 // Đăng nhập
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -70,10 +69,15 @@ router.post("/login", async (req, res) => {
     if (!match) {
       return res.status(401).json({ error: "Sai tài khoản hoặc mật khẩu" });
     }
-
-    res
-      .status(200)
-      .json({ message: "Đăng nhập thành công", userId: user.Id, username: user.Username });
+    console.log("✅ Trả dữ liệu:", {
+      userId: user.Id,
+      username: user.Username,
+    });
+    res.status(200).json({
+      message: "Đăng nhập thành công",
+      userId: user.Id,
+      username: user.Username,
+    });
   } catch (err) {
     console.error("❌ Lỗi khi đăng nhập:", err);
     res.status(500).json({ error: "Lỗi server khi đăng nhập" });

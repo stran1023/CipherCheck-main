@@ -1,35 +1,31 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
-// Tạo ngữ cảnh
 export const AuthContext = createContext();
 
-// Provider dùng để bao bọc toàn ứng dụng
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true); // 🟡 Thêm trạng thái đợi user
 
-  // Khi load lại trang, kiểm tra localStorage
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+    setLoadingUser(false); // ✅ Đánh dấu đã load xong user
   }, []);
 
-  // Hàm login: set user và lưu vào localStorage
-  const login = (userObj) => {
-    setUser(userObj);
-    localStorage.setItem("user", JSON.stringify(userObj));
-  };
-  
-  // Hàm logout: xóa user
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  const login = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
   };
 
-  // ✅ Phải truyền setUser vào Provider
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loadingUser }}>
       {children}
     </AuthContext.Provider>
   );

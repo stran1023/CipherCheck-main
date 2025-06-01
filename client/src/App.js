@@ -14,7 +14,6 @@ const PrivateRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
   return user ? children : <Navigate to="/login" />;
 };
-
 function App() {
   return (
     <AuthProvider>
@@ -30,11 +29,17 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/analyze" />} />
+          <Route
+            path="*"
+            element={
+              <PrivateRoute>
+                <Navigate to="/analyze" />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>
   );
 }
-
 export default App;
