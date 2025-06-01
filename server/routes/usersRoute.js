@@ -64,7 +64,6 @@ router.post("/login", async (req, res) => {
     }
 
     const user = userQuery.recordset[0];
-    console.log("📦 user từ DB:", user);
 
     const match = await bcrypt.compare(password, user.PasswordHash);
 
