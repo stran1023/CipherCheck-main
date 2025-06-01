@@ -27,7 +27,7 @@ const RegisterPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/users/register",
+        "https://ciphercheck-main.onrender.com/api/users/register",
         form
       );
 

@@ -13,10 +13,13 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3001/api/users/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "https://ciphercheck-main.onrender.com/api/users/login",
+        {
+          username,
+          password,
+        }
+      );
 
       console.log("✅ Đăng nhập thành công:", res.data);
       login(res.data.username);

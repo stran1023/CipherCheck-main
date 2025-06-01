@@ -13,11 +13,15 @@ const FileAnalyzer = () => {
     formData.append("userId", 1); // ⚠️ Cập nhật ID user nếu cần
 
     try {
-      const res = await axios.post("http://localhost:3001/api/scan", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        "https://ciphercheck-main.onrender.com/api/scan",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("✅ Phản hồi từ backend:", res.data);
       alert(
