@@ -14,7 +14,7 @@ const FileAnalyzer = () => {
 
     try {
       const res = await axios.post(
-        "https://ciphercheck-main.onrender.com/api/scan",
+        "http://localhost:3001/api/scan",
         formData,
         {
           headers: {

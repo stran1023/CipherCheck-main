@@ -27,14 +27,17 @@ const RegisterPage = () => {
 
     try {
       const res = await axios.post(
-        "https://ciphercheck-main.onrender.com/api/users/register",
+        "http://localhost:3001/api/users/register",
         form
       );
 
       console.log("✅ Đăng ký thành công:", res.data);
 
       // 👉 Gọi login sau khi đăng ký thành công
-      login(res.data.username);
+      login({
+        userId: res.data.userId,
+        username: res.data.username,
+      });
       setMessage(res.data.message);
       navigate("/analyze");
     } catch (err) {

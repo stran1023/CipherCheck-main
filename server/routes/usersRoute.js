@@ -35,8 +35,20 @@ router.post("/register", async (req, res) => {
         VALUES (@Username, @PasswordHash, @Email)`
       );
 
+    const userQuery = await pool
+      .request()
+      .input("Username", username)
+      .query("SELECT * FROM Users WHERE Username = @Username");
+
+    if (userQuery.recordset.length === 0) {
+      console.log("❌ Không tìm thấy username:", username);
+      return res.status(401).json({ error: "Sai tài khoản hoặc mật khẩu" });
+    }
+
+    const user = userQuery.recordset[0];
+
     console.log("✅ Đăng ký thành công:", username);
-    res.status(201).json({ message: "Đăng ký thành công", username });
+    res.status(201).json({ message: "Đăng ký thành công", userId: user.Id, username: user.Username });
   } catch (err) {
     console.error("❌ Lỗi đăng ký:", err);
     res.status(500).json({ error: "Lỗi server khi đăng ký" });

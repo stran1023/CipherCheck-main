@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AnalyzePage from "./pages/AnalyzePage";
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<AnalyzePage />} />
-      </Routes>
-    </Router>
-=======
 import React, { useContext } from "react";
 import RegisterPage from "./pages/RegisterPage";
 import {
@@ -47,7 +34,6 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
->>>>>>> ec52b92a43e2401691ce1765d83b68d7054d4330
   );
 }
 
